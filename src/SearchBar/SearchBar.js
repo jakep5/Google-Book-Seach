@@ -3,9 +3,9 @@ import './SearchBar.css'
 import Filters from '../Filters/Filters';
 import BookList from '../BookList/BookList';
 
-export default class SearchBar extends Component {
+class SearchBar extends Component {
+    
 
- 
     render() {
         return (
             <div>
@@ -15,8 +15,10 @@ export default class SearchBar extends Component {
                         id = "searchForm"
                         onSubmit = {e => {
                             e.preventDefault();
-                            this.props.handleSearchTerm(document.getElementById('bookTitle').value)
-                        }}>
+                            const term = (document.getElementById('bookTitle').value)
+                            this.props.handleSearchTerm(term)
+                        }}
+                        >
                         <label htmlFor="bookTitle">Search:</label>
                         <input 
                             type="text"
@@ -26,12 +28,14 @@ export default class SearchBar extends Component {
                             id="bookTitle"
                         >
                         </input>
-                        <button type="submit" htmlFor="searchForm">Search</button>
+                        <button type="submit" htmlFor="searchForm">Submit</button>
                     </form>
                 </div>
-                <Filters />
+                <Filters onPrintTypeChange={type => this.props.handlePrintType(type)} onBookTypeChange={bookType => this.props.handleBookType(bookType)}/>
             </div>
             
         )
     }
 }
+
+export default SearchBar

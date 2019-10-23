@@ -1,51 +1,52 @@
 import React from 'react';
 import "./App.css";
 import SearchBar from './SearchBar/SearchBar';
+import BookList from './BookList/BookList';
+
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      searchTerm: '',
+      searchTerm: null,
       books : [],
       showBookDescription: false,
       printType: 'all',
       bookType: '',
-      url: '',
+      url: 'https://www.googleapis.com/books/v1/volumes?keyAIzaSyAxOUySM6fNOlFXHaxvO7wiaZTkanchXus&maxResults=20&q='
     }
 
   }
 
-  changeSearchTerm (term) {
-    this.setState = ({
-       searchTerm: term
+  changeSearchTerm (string) {
+    this.setState({
+       searchTerm: string,
     })
   }
 
   changePrintTypeFilter (type) {
-    this.setState = ({
+    this.setState ({
       printType: type,
     })
   }
   
   changeBookTypeFilter (bookType) {
-    this.setState = ({
+    this.setState({
       bookType: bookType,
     })
   }
-  
-  componentDidMount() {
-    if (this.state.bookType = '') {
-      this.setState({
-        url: 'https://www.googleapis.com/books/v1/volumes?key=AIzaSyAxOUySM6fNOlFXHaxvO7wiaZTkanchXus&q=' + this.state.searchTerm + '&printType=' + this.state.printType,
-      })
-    } else {
-      this.setState({
-        url: 'https://www.googleapis.com/books/v1/volumes?key=AIzaSyAxOUySM6fNOlFXHaxvO7wiaZTkanchXus&q=' + this.state.searchTerm + '&printType=' + this.state.printType + '&filter=' + this.state.bookType,
+
+  updateBooks(data) {
+    this.setState({
+      books: [data],
     })
-    }
-    fetch (this.state.url) 
+    console.log(this.state.books)
+  }
+  
+  componentDidUpdate() {
+    const url = this.state.url + this.state.searchTerm
+    fetch (url)
       .then (response => {
         if(!response.ok) {
           throw new Error ('Something went wrong, please try again.')
@@ -55,17 +56,13 @@ class App extends React.Component {
         }
       })
       .then (response => response.json())
-      .then(data =>
-        this.setState({
-          books: [data],
-        }))
+      .then(data => this.updateBooks(data))
       .catch (err => {
-        this.setState({
-          error: err.message
+        alert(err.message)
         })
-      })
-    }
-  
+      }
+
+
   render() {
     return (
       <main className='App'>
@@ -74,9 +71,11 @@ class App extends React.Component {
             <h1>Google Book Search</h1>
           </div>
           <SearchBar 
-            handleSearchTerm = {term  => this.changeSearchTerm(term)}
+            handleSearchTerm = {string => this.changeSearchTerm(string)}
             handlePrintType = {type => this.changePrintTypeFilter(type)}
             handleBookType = {bookType => this.changeBookTypeFilter(bookType)}/>
+          <BookList 
+            books = {this.state.books} />
         </div>
       </main>
     );
