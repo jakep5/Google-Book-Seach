@@ -1,0 +1,13 @@
+#bookTitle {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+div.searchBar {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 30px;
+    background-color: grey;
+}
