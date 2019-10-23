@@ -75,7 +75,7 @@ class App extends React.Component {
             handlePrintType = {type => this.changePrintTypeFilter(type)}
             handleBookType = {bookType => this.changeBookTypeFilter(bookType)}/>
           <BookList 
-            books = {this.state.books} />
+            bookArray = {this.state.books} />
         </div>
       </main>
     );
