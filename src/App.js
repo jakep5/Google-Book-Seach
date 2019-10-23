@@ -11,6 +11,8 @@ class App extends React.Component {
     this.state = {
       books : [],
       showBookDescription: false,
+      printType: 'all',
+      bookType: '',
     }
 
   }
@@ -20,7 +22,11 @@ class App extends React.Component {
   }
   
   componentDidMount() {
-    const url = 'https://www.googleapis.com/books/v1/volumes?key=AIzaSyAxOUySM6fNOlFXHaxvO7wiaZTkanchXus&q=' + book + '&printType=' + printType + '&filter=' + bookType;
+    if (this.state.bookType = '') {
+      const url = 'https://www.googleapis.com/books/v1/volumes?key=AIzaSyAxOUySM6fNOlFXHaxvO7wiaZTkanchXus&q=' + book + '&printType=' + this.state.printType;
+    } else {
+      const url = 'https://www.googleapis.com/books/v1/volumes?key=AIzaSyAxOUySM6fNOlFXHaxvO7wiaZTkanchXus&q=' + book + '&printType=' + this.state.printType + '&filter=' + bookType;
+    }
 
     fetch (url) 
       .then (response => {
@@ -32,7 +38,10 @@ class App extends React.Component {
         }
       })
       .then (response => response.json())
-      .then(console.log(response))
+      .then(data =>
+        this.setState({
+          books: [data],
+        }))
       .catch (err => {
         this.setState({
           error: err.message
